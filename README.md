@@ -10,20 +10,28 @@ The code listens for the 'fetch' event and responds with the result of the handl
 
 <!-- USAGE -->
 ## Usage
-Add the following code to your Cloudflare Worker script:
-```sh
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
+To begin, please create a new worker in your account. For instance, here i used "auth-website" for my worker.
 
-async function handleRequest(request) {
-  // Authorization logic here
-}
-```
+![Make Worker](/assets/images/Image-1.png)
+
+Next, click on "Quick Edit" and copy all the codes from "auth-url-cloudflare-workers.js" to your worker. Then click on "Save and Deploy" after making the changes.
+
+![Deploy Worker](/assets/images/Image-2.png)
+
+Then, navigate to your domain in Cloudflare and click on "Workers Routes".
+
+![Cloudflare Domain](/assets/images/Image-3.png)
+
+Add a new route by clicking on "Add Route" and enter your domain name. Select the Cloudflare worker that you created earlier and save the settings.
+
+![Add Route](/assets/images/Image-4.png)
+
+Lastly, you will need to make some changes in the worker codes as I explain in the following section.
 
 <!-- CHANGES -->
 ## What you need to change ?
 Define the URLs that you want to restrict access to and the usernames that are authorized to access them in the urlsToPass array in the handleRequest function. You can use wildcard * to define URL patterns.
+You need to change these codes in your cloudflare worker
 ```sh
 const urlsToPass = [  
   { url: 'https://example.com/endpoint1/*', usernames: ['user1', 'user2'] },
@@ -43,13 +51,14 @@ Define the URL that you want to redirect user if a user doesn't have permission 
  return Response.redirect('https://example.com', 301);
 ```
 
+Deploy the Cloudflare Worker with the updated code.
+
 <!-- EXTRA INFORMATION -->
 ## Extra information
 Customize the realm name in the REALM constant, which is used in the getUnauthorizedResponse function to generate the WWW-Authenticate header for unauthorized requests.
 ```sh
 const REALM = 'Secure Area';
 ```
-Deploy the Cloudflare Worker with the updated code.
 
 <!-- LICENSE -->
 ## License
